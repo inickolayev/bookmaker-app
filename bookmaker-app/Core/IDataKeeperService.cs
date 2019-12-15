@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using BookmakerApp.Data;
 
 namespace BookmakerApp.Core
@@ -10,22 +11,18 @@ namespace BookmakerApp.Core
     /// </summary>
     public interface IDataKeeperService
     {
-        #region Public fields
+        #region Public methods
 
         /// <summary>
         ///     Футбольные команды
         /// </summary>
-        IEnumerable<FootballTeamInfo> FootballTeams { get; }
-
-        #endregion Public fields
-
-        #region Public methods
+        Task<IEnumerable<FootballTeamInfo>> GetFootballTeamsAsync();
 
         /// <summary>
         ///     Получить список всех футбольных матчей
         /// </summary>
         /// <returns>Список матчей</returns>
-        IEnumerable<MatchInfo<FootballTeamInfo>> GetFootballMatches();
+        Task<IEnumerable<MatchInfo<FootballTeamInfo>>> GetFootballMatchesAsync();
 
         /// <summary>
         ///     Получить список футбольных матчей с учетом фильтрации
@@ -34,7 +31,7 @@ namespace BookmakerApp.Core
         /// <param name="skip">Кол-во пропущенных записей в общем списке</param>
         /// <param name="take">Кол-во взятых записей, начиная с первой не пропущенной записи</param>
         /// <returns>Список матчей</returns>
-        IEnumerable<MatchInfo<FootballTeamInfo>> GetFootballMatches(EMatchStatus status, int skip = 0, int take = int.MaxValue);
+        Task<IEnumerable<MatchInfo<FootballTeamInfo>>> GetFootballMatchesAsync(EMatchStatus status, int skip = 0, int take = int.MaxValue);
 
         #endregion Public methods
     }
