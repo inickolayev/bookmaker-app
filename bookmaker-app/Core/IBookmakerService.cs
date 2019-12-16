@@ -15,9 +15,10 @@ namespace BookmakerApp.Core
         ///     Сделать ставку
         /// </summary>
         /// <typeparam name="TTeam">Тип соревнования</typeparam>
+        /// <param name="user">Пользователь, совершающий ставку</param>
         /// <param name="expectedResult">Ожидаемый результат</param>
         /// <returns></returns>
-        Task<OperationResult<MatchBetInfo<TTeam>>> MakeBetAsync<TTeam>(MatchResultInfo<TTeam> expectedResult)
+        Task<OperationResult<MatchBetInfo<TTeam>>> MakeBetAsync<TTeam>(UserInfo user, MatchResultInfo<TTeam> expectedResult)
             where TTeam : TeamInfo;
 
         /// <summary>

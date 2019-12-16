@@ -10,7 +10,17 @@ namespace BookmakerApp.Data
     public class MatchBetResultInfo<TTeam>: BaseInfo
         where TTeam: TeamInfo
     {
+        /// <summary>
+        ///     Ставка
+        /// </summary>
         public MatchBetInfo<TTeam> Bet { get; set; }
-        public 
+        /// <summary>
+        ///     Результат соревнования
+        /// </summary>
+        public MatchResultInfo<TTeam> MatchResult { get; set; }
+        /// <summary>
+        ///     Награда за ставку
+        /// </summary>
+        public double Reward { get; set; }
     }
 }

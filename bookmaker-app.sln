@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookmaker-app", "bookmaker-app\bookmaker-app.csproj", "{F3315EFF-D4EC-470D-A6DB-FA8C3DC9F214}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookmakerApp", "bookmaker-app\BookmakerApp.csproj", "{F3315EFF-D4EC-470D-A6DB-FA8C3DC9F214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookmakerAppTests", "BookmakerAppTests\BookmakerAppTests.csproj", "{5BF07E7E-B40A-4604-910B-360247C67EDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F3315EFF-D4EC-470D-A6DB-FA8C3DC9F214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3315EFF-D4EC-470D-A6DB-FA8C3DC9F214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3315EFF-D4EC-470D-A6DB-FA8C3DC9F214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BF07E7E-B40A-4604-910B-360247C67EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BF07E7E-B40A-4604-910B-360247C67EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BF07E7E-B40A-4604-910B-360247C67EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BF07E7E-B40A-4604-910B-360247C67EDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

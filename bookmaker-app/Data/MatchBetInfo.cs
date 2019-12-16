@@ -11,6 +11,10 @@ namespace BookmakerApp.Data
         where TTeam: TeamInfo
     {
         /// <summary>
+        ///     Пользователь сделавший ставку
+        /// </summary>
+        public UserInfo User { get; set; }
+        /// <summary>
         ///     Матч
         /// </summary>
         public MatchInfo<TTeam> Match { get; set; }
