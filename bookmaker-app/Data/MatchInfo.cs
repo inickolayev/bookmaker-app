@@ -8,7 +8,7 @@ namespace BookmakerApp.Data
     ///     Информация о прошедшем матче
     /// </summary>
     /// <typeparam name="TTeam">Тип команд матча (футбол, воллейбол и т.д.)</typeparam>
-    public class MatchInfo<TTeam>
+    public class MatchInfo<TTeam>: BaseInfo
         where TTeam : TeamInfo
     {
         /// <summary>

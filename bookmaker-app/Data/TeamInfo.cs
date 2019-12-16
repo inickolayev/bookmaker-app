@@ -7,7 +7,7 @@ namespace BookmakerApp.Data
     /// <summary>
     ///     Информация о команде
     /// </summary>
-    public abstract class TeamInfo
+    public abstract class TeamInfo: BaseInfo
     {
         /// <summary>
         ///     Название команды
