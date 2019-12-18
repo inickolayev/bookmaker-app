@@ -18,7 +18,7 @@ namespace BookmakerApp.Core
         /// <param name="user">Пользователь, совершающий ставку</param>
         /// <param name="expectedResult">Ожидаемый результат</param>
         /// <returns></returns>
-        Task<OperationResult<MatchBetInfo<TTeam>>> MakeBetAsync<TTeam>(UserInfo user, MatchResultInfo<TTeam> expectedResult)
+        Task<OperationResultInfo<MatchBetInfo<TTeam>>> MakeBetAsync<TTeam>(UserInfo user, MatchResultInfo<TTeam> expectedResult)
             where TTeam : TeamInfo;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace BookmakerApp.Core
         /// <typeparam name="TTeam">Тип соревнования</typeparam>
         /// <param name="bet">Ставка</param>
         /// <returns>Результат по ставке</returns>
-        Task<OperationResult<MatchBetResultInfo<TTeam>>> GetResultAsync<TTeam>(MatchBetInfo<TTeam> bet)
+        Task<OperationResultInfo<MatchBetResultInfo<TTeam>>> GetResultAsync<TTeam>(MatchBetInfo<TTeam> bet)
             where TTeam: TeamInfo;
     }
 }

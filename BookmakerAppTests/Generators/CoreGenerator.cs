@@ -7,7 +7,7 @@ namespace BookmakerAppTests.Generators
     /// <summary>
     ///     Генератор различных примитивов
     /// </summary>
-    class CoreGenerator
+    public class CoreGenerator
     {
         #region .Ctor
 
@@ -18,7 +18,7 @@ namespace BookmakerAppTests.Generators
 
         #endregion .Ctor
 
-        #region Public fields
+        #region Public methods
 
         /// <summary>
         ///     Сгенерировать целое число
@@ -31,6 +31,8 @@ namespace BookmakerAppTests.Generators
 
         public string GenerateName()
             => Guid.NewGuid().ToString();
+
+        #endregion Public methods
 
         #region Private fields
 

@@ -19,7 +19,7 @@ namespace BookmakerApp.Core
         /// </summary>
         /// <param name="team">Команда для добавления</param>
         /// <returns>Результат выполнения операции добавления</returns>
-        Task<OperationResult<bool>> AddTeam(TTeam team);
+        Task<OperationResultInfo<TTeam>> AddTeam(TTeam team);
 
         /// <summary>
         ///     Получить писок команд
@@ -35,7 +35,7 @@ namespace BookmakerApp.Core
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns>Результат выполнения операции добавления</returns>
-        Task<OperationResult<bool>> AddMatch(MatchInfo<TTeam>  match);
+        Task<OperationResultInfo<MatchInfo<TTeam>>> AddMatch(MatchInfo<TTeam>  match);
 
         /// <summary>
         ///     Получить список всех футбольных матчей
@@ -59,20 +59,20 @@ namespace BookmakerApp.Core
         /// </summary>
         /// <param name="result">Результат матча</param>
         /// <returns>Результат выполнения операции добавления</returns>
-        Task<OperationResult<bool>> AddMatchResult(MatchResultInfo<TTeam> result);
+        Task<OperationResultInfo<MatchResultInfo<TTeam>>> AddMatchResult(MatchResultInfo<TTeam> result);
 
         /// <summary>
         ///     Получить результаты матчей
         /// </summary>
         /// <returns>Результаты матчей</returns>
-        Task<OperationResult<MatchResultInfo<TTeam>>> GetMatchResultsAsync();
+        Task<OperationResultInfo<IEnumerable<MatchResultInfo<TTeam>>>> GetMatchResultsAsync();
 
         /// <summary>
         ///     Получить результаты матчей для команды
         /// </summary>
         /// <param name="team">Команда, по которой происходит запрос</param>
         /// <returns>Результаты матчей</returns>
-        Task<OperationResult<MatchResultInfo<TTeam>>> GetMatchResultsAsync(TTeam team);
+        Task<OperationResultInfo<IEnumerable<MatchResultInfo<TTeam>>>> GetMatchResultsAsync(TTeam team);
 
         /// <summary>
         ///     Получить результаты матчей для команды с заданым статусом
@@ -80,14 +80,14 @@ namespace BookmakerApp.Core
         /// <param name="team">Команда, по которой происходит запрос</param>
         /// <param name="status">Статусы данных матчей</param>
         /// <returns>Результаты матчей</returns>
-        Task<OperationResult<MatchResultInfo<TTeam>>> GetMatchResultsAsync(TTeam team, EMatchStatus status);
+        Task<OperationResultInfo<IEnumerable<MatchResultInfo<TTeam>>>> GetMatchResultsAsync(TTeam team, EMatchStatus status);
 
         /// <summary>
         ///     Получить результат матча
         /// </summary>
         /// <param name="match">Матч</param>
         /// <returns>Результат матча</returns>
-        Task<OperationResult<MatchResultInfo<TTeam>>> GetMatchResultAsync(MatchInfo<TTeam> match);
+        Task<OperationResultInfo<MatchResultInfo<TTeam>>> GetMatchResultAsync(MatchInfo<TTeam> match);
 
         #endregion MatchResults
     }

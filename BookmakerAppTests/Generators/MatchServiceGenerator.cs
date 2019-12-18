@@ -27,6 +27,18 @@ namespace BookmakerAppTests.Generators
                 TeamName = name ?? _coreGenerator.GenerateName(),
             };
 
+        /// <summary>
+        ///     Сгенерировать команду
+        /// </summary>
+        public MatchInfo<TestTeamInfo> GenerateMatch(EMatchStatus status, string teamName1 = "team_1", string teamName2 = "team_2")
+            => new MatchInfo<TestTeamInfo>
+            {
+                Id = _coreGenerator.GenerateInt(1),
+                FirstTeam = GenerateTeam(teamName1),
+                SecondTeam = GenerateTeam(teamName2),
+                Status = status
+            };
+
         #region Private fields
 
         private readonly CoreGenerator _coreGenerator;

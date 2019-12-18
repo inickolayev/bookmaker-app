@@ -9,7 +9,7 @@ namespace BookmakerApp.Core
     ///     Результат выполнения операции
     /// </summary>
     /// <typeparam name="TContract"></typeparam>
-    public class OperationResult<TContract>
+    public class OperationResultInfo<TContract>
     {
         /// <summary>
         ///     Результат выполнения операции
@@ -18,7 +18,7 @@ namespace BookmakerApp.Core
         /// <summary>
         ///     Список ошибок
         /// </summary>
-        public IEnumerable<Error> Errors { get; set; } = new List<Error>();
+        public IEnumerable<ErrorInfo> Errors { get; set; } = new List<ErrorInfo>();
         /// <summary>
         ///     Если ли ошибки
         /// </summary>
