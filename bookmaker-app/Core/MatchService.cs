@@ -99,6 +99,10 @@ namespace BookmakerApp.Core
         /// <returns>Результат выполнения операции добавления</returns>
         public async Task<OperationResultInfo<MatchResultInfo<TTeam>>> AddMatchResult(MatchResultInfo<TTeam> result)
         {
+            if (!_matches.Contains(result.Match))
+            {
+                return Error<MatchResultInfo<TTeam>>(MATCH_DOES_NOT_EXIST_ERROR(result.Match));
+            }
             _results.Add(result);
             return Ok(result);
         }
@@ -134,6 +138,10 @@ namespace BookmakerApp.Core
         /// <returns>Результат матча</returns>
         public async Task<OperationResultInfo<MatchResultInfo<TTeam>>> GetMatchResultAsync(MatchInfo<TTeam> match)
         {
+            if (!_matches.Contains(match))
+            {
+                return Error<MatchResultInfo<TTeam>>(MATCH_DOES_NOT_EXIST_ERROR(match));
+            }
             var result = _results.First(_ => _.Match == match);
             return Ok(result);
         }
@@ -148,10 +156,12 @@ namespace BookmakerApp.Core
 
         public static ErrorInfo TEAM_ALREADY_EXIST_ERROR(string teamName)
             => new ErrorInfo($"Команда \"{teamName}\" уже существует");
-        public static ErrorInfo MATCH_ALREADY_EXIST_ERROR(MatchInfo<TTeam> match)
-            => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" уже существует");
         public static ErrorInfo TEAM_DOES_NOT_EXIST_ERROR(TTeam team)
             => new ErrorInfo($"Команды \"{team.TeamName}\" не существует");
+        public static ErrorInfo MATCH_ALREADY_EXIST_ERROR(MatchInfo<TTeam> match)
+            => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" уже существует");
+        public static ErrorInfo MATCH_DOES_NOT_EXIST_ERROR(MatchInfo<TTeam> match)
+            => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" не существует");
 
         #endregion Errors
 

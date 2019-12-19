@@ -28,7 +28,7 @@ namespace BookmakerAppTests.Generators
             };
 
         /// <summary>
-        ///     Сгенерировать команду
+        ///     Сгенерировать матч
         /// </summary>
         public MatchInfo<TestTeamInfo> GenerateMatch(EMatchStatus status, string teamName1 = "team_1", string teamName2 = "team_2")
             => new MatchInfo<TestTeamInfo>
@@ -38,6 +38,25 @@ namespace BookmakerAppTests.Generators
                 SecondTeam = GenerateTeam(teamName2),
                 Status = status
             };
+
+
+        /// <summary>
+        ///     Сгенерировать результат матча
+        /// </summary>
+        public MatchResultInfo<TestTeamInfo> GenerateResult(int firtTeamResult, int secondTeamResult, string teamName1 = "team_1", string teamName2 = "team_2")
+            => new MatchResultInfo<TestTeamInfo>
+            {
+                Id = _coreGenerator.GenerateInt(1),
+                Match = GenerateMatch(EMatchStatus.FINISHED, teamName1, teamName2),
+                FirstTeamResult = firtTeamResult,
+                SecondTeamResult = secondTeamResult,
+            };
+
+        /// <summary>
+        ///     Сгенерировать результат матча
+        /// </summary>
+        public MatchResultInfo<TestTeamInfo> GenerateResult(string teamName1 = "team_1", string teamName2 = "team_2")
+            => GenerateResult(_coreGenerator.GenerateInt(0, 10), _coreGenerator.GenerateInt(0, 10), teamName1, teamName2);
 
         #region Private fields
 

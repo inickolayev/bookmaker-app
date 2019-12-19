@@ -29,7 +29,7 @@ namespace BookmakerAppTests.Core
         ///     Тест на проверку успешного выполнения идеального сценария
         /// </summary>
         [Fact]
-        public async Task GetMatchResultAsync_success()
+        public async Task GetMatchResultAsync_Success()
         {
             var firstTeam = _matchServiceGenerator.GenerateTeam($"team_1");
             var secondTeam = _matchServiceGenerator.GenerateTeam($"team_2");
@@ -60,7 +60,7 @@ namespace BookmakerAppTests.Core
         }
 
         [Fact]
-        public async Task AddTeam_AlreadyExist_error()
+        public async Task AddTeam_AlreadyExist_Error()
         {
             var teamName = $"team_1";
             var team = _matchServiceGenerator.GenerateTeam(teamName);
@@ -76,7 +76,7 @@ namespace BookmakerAppTests.Core
         }
 
         [Fact]
-        public async Task AddMatch_AlreadyExist_error()
+        public async Task AddMatch_AlreadyExist_Error()
         {
             var match = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING);
             IEnumerable<ErrorInfo> expected = new List<ErrorInfo> { MatchService<TestTeamInfo>.MATCH_ALREADY_EXIST_ERROR(match) };
@@ -93,7 +93,7 @@ namespace BookmakerAppTests.Core
         }
 
         [Fact]
-        public async Task AddMatch_FirstTeamNotExist_error()
+        public async Task AddMatch_FirstTeamNotExist_Error()
         {
             var match = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING);
             var expected = Error<MatchResultInfo<TestTeamInfo>>(MatchService<TestTeamInfo>.TEAM_DOES_NOT_EXIST_ERROR(match.FirstTeam)).Errors;
@@ -106,13 +106,44 @@ namespace BookmakerAppTests.Core
         }
 
         [Fact]
-        public async Task AddMatch_SecondTeamNotExist_error()
+        public async Task AddMatch_SecondTeamNotExist_Error()
         {
             var match = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING);
             var expected = Error<MatchResultInfo<TestTeamInfo>>(MatchService<TestTeamInfo>.TEAM_DOES_NOT_EXIST_ERROR(match.SecondTeam)).Errors;
 
             await _matchService.AddTeam(match.FirstTeam);
             var opResult = await _matchService.AddMatch(match);
+
+            Assert.True(opResult.HasErrors);
+            var result = opResult.Errors;
+            Assert.Equal(result, expected);
+        }
+
+        [Fact]
+        public async Task AddMatchResult_MatchNotExist_Error()
+        {
+            var matchResult = _matchServiceGenerator.GenerateResult();
+            var expected = Error<MatchResultInfo<TestTeamInfo>>(MatchService<TestTeamInfo>.MATCH_DOES_NOT_EXIST_ERROR(matchResult.Match)).Errors;
+
+            await _matchService.AddTeam(matchResult.Match.FirstTeam);
+            await _matchService.AddTeam(matchResult.Match.SecondTeam);
+            var opResult = await _matchService.AddMatchResult(matchResult);
+
+            Assert.True(opResult.HasErrors);
+            var result = opResult.Errors;
+            Assert.Equal(result, expected);
+        }
+
+
+        [Fact]
+        public async Task GetMatchResult_MatchNotExist_Error()
+        {
+            var matchResult = _matchServiceGenerator.GenerateResult();
+            var expected = Error<MatchResultInfo<TestTeamInfo>>(MatchService<TestTeamInfo>.MATCH_DOES_NOT_EXIST_ERROR(matchResult.Match)).Errors;
+
+            await _matchService.AddTeam(matchResult.Match.FirstTeam);
+            await _matchService.AddTeam(matchResult.Match.SecondTeam);
+            var opResult = await _matchService.GetMatchResultAsync(matchResult.Match);
 
             Assert.True(opResult.HasErrors);
             var result = opResult.Errors;
