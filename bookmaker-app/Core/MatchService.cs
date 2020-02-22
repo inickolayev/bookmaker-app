@@ -39,9 +39,7 @@ namespace BookmakerApp.Core
         public async Task<OperationResultInfo<TTeam>> AddTeam(TTeam team)
         {
             if (_teams.Contains(team))
-            {
                 return Error<TTeam>(TEAM_ALREADY_EXIST_ERROR(team.TeamName));
-            }
             _teams.Add(team);
             return Ok(team);
         }
@@ -77,15 +75,23 @@ namespace BookmakerApp.Core
         ///     Получить список всех футбольных матчей
         /// </summary>
         /// <returns>Список матчей</returns>
-        public async Task<IEnumerable<MatchInfo<TTeam>>> GetMatchesAsync()
-            => throw new NotImplementedException();
+        public async Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync()
+            => Ok(_matches.AsEnumerable());
+
+        /// <summary>
+        ///     Получить список футбольных матчей с учетом фильтрации
+        /// </summary>
+        /// <param name="team">Команда, участвующая в матче</param>
+        /// <returns>Список матчей</returns>
+        public async Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync(TTeam team)
+            => Ok(_matches.Where(m => m.FirstTeam == team || m.SecondTeam == team));
 
         /// <summary>
         ///     Получить список футбольных матчей с учетом фильтрации
         /// </summary>
         /// <param name="status">Статус матчей</param>
         /// <returns>Список матчей</returns>
-        public async Task<IEnumerable<MatchInfo<TTeam>>> GetMatchesAsync(EMatchStatus status)
+        public async Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync(EMatchStatus status)
             => throw new NotImplementedException();
 
         #endregion Matches
@@ -100,9 +106,10 @@ namespace BookmakerApp.Core
         public async Task<OperationResultInfo<MatchResultInfo<TTeam>>> AddMatchResult(MatchResultInfo<TTeam> result)
         {
             if (!_matches.Contains(result.Match))
-            {
                 return Error<MatchResultInfo<TTeam>>(MATCH_DOES_NOT_EXIST_ERROR(result.Match));
-            }
+            var match = result.Match;
+            if (match.Status != EMatchStatus.FINISHED)
+                return Error<MatchResultInfo<TTeam>>(MATCH_WRONG_STATUS_ERROR(result.Match));
             _results.Add(result);
             return Ok(result);
         }
@@ -112,7 +119,7 @@ namespace BookmakerApp.Core
         /// </summary>
         /// <returns>Результаты матчей</returns>
         public async Task<OperationResultInfo<IEnumerable<MatchResultInfo<TTeam>>>> GetMatchResultsAsync()
-            => throw new NotImplementedException();
+            => Ok(_results.AsEnumerable());
 
         /// <summary>
         ///     Получить результаты матчей для команды
@@ -160,6 +167,8 @@ namespace BookmakerApp.Core
             => new ErrorInfo($"Команды \"{team.TeamName}\" не существует");
         public static ErrorInfo MATCH_ALREADY_EXIST_ERROR(MatchInfo<TTeam> match)
             => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" уже существует");
+        public static ErrorInfo MATCH_WRONG_STATUS_ERROR(MatchInfo<TTeam> match)
+            => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" еще не окончен: Статус:{match.Status}");
         public static ErrorInfo MATCH_DOES_NOT_EXIST_ERROR(MatchInfo<TTeam> match)
             => new ErrorInfo($"Матч между \"{match.FirstTeam.TeamName}\" и \"{match.SecondTeam.TeamName}\" не существует");
 

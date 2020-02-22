@@ -72,7 +72,7 @@ namespace BookmakerAppTests.Core
             var secondResult = await _matchService.AddTeam(team);
             Assert.True(secondResult.HasErrors);
             var result = secondResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace BookmakerAppTests.Core
             var secondResult = await _matchService.AddMatch(match);
             Assert.True(secondResult.HasErrors);
             var result = secondResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace BookmakerAppTests.Core
 
             Assert.True(opResult.HasErrors);
             var result = opResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace BookmakerAppTests.Core
 
             Assert.True(opResult.HasErrors);
             var result = opResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -131,9 +131,25 @@ namespace BookmakerAppTests.Core
 
             Assert.True(opResult.HasErrors);
             var result = opResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public async Task AddMatchResult_MatchHasWrongStatus_Error()
+        {
+            var matchResult = _matchServiceGenerator.GenerateResult();
+            matchResult.Match.Status = EMatchStatus.AWAITING;
+            var expected = Error<MatchResultInfo<TestTeamInfo>>(MatchService<TestTeamInfo>.MATCH_WRONG_STATUS_ERROR(matchResult.Match)).Errors;
+
+            await _matchService.AddTeam(matchResult.Match.FirstTeam);
+            await _matchService.AddTeam(matchResult.Match.SecondTeam);
+            await _matchService.AddMatch(matchResult.Match);
+            var opResult = await _matchService.AddMatchResult(matchResult);
+
+            Assert.True(opResult.HasErrors);
+            var result = opResult.Errors;
+            Assert.Equal(expected, result);
+        }
 
         [Fact]
         public async Task GetMatchResult_MatchNotExist_Error()
@@ -147,7 +163,74 @@ namespace BookmakerAppTests.Core
 
             Assert.True(opResult.HasErrors);
             var result = opResult.Errors;
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task GetMatchResults_Success()
+        {
+            var matchResult1 = _matchServiceGenerator.GenerateResult();
+            var matchResult2 = _matchServiceGenerator.GenerateResult();
+            var expected = new List<MatchResultInfo<TestTeamInfo>>
+            {
+                matchResult1,
+                matchResult2
+            };
+
+            await AddWithDependencies(matchResult1);
+            await AddWithDependencies(matchResult2);
+            var opResult = await _matchService.GetMatchResultsAsync();
+
+            Assert.False(opResult.HasErrors);
+            var result = opResult.Result;
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task GetMatchResults_ForTeam_Success()
+        {
+            var team = _matchServiceGenerator.GenerateTeam();
+            var team1 = _matchServiceGenerator.GenerateTeam();
+            var team2 = _matchServiceGenerator.GenerateTeam();
+            var match1 = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING, team, team1);
+            var match2 = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING, team, team2);
+            var match3 = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING, team1, team2);
+            var expected = new List<MatchInfo<TestTeamInfo>>
+            {
+                match1, match2
+            };
+
+            await _matchService.AddTeam(team);
+            await _matchService.AddTeam(team1);
+            await _matchService.AddTeam(team2);
+            await _matchService.AddMatch(match1);
+            await _matchService.AddMatch(match2);
+            await _matchService.AddMatch(match3);
+            var opResult = await _matchService.GetMatchesAsync(team);
+
+            Assert.False(opResult.HasErrors);
+            var result = opResult.Result;
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task GetMatches_Success()
+        {
+            var match1 = _matchServiceGenerator.GenerateMatch(EMatchStatus.AWAITING);
+            var match2 = _matchServiceGenerator.GenerateMatch(EMatchStatus.FINISHED);
+            var expected = new List<MatchInfo<TestTeamInfo>>
+            {
+                match1,
+                match2
+            };
+
+            await AddWithDependencies(match1);
+            await AddWithDependencies(match2);
+            var opResult = await _matchService.GetMatchesAsync();
+
+            Assert.False(opResult.HasErrors);
+            var result = opResult.Result;
+            Assert.Equal(expected, result);
         }
 
         #endregion Tests
@@ -177,6 +260,19 @@ namespace BookmakerAppTests.Core
             => Compare(result1.Match, result2.Match)
             && result1.FirstTeamResult == result2.FirstTeamResult
             && result1.SecondTeamResult == result2.SecondTeamResult;
+
+        private async Task AddWithDependencies(MatchInfo<TestTeamInfo> match)
+        {
+            await _matchService.AddTeam(match.FirstTeam);
+            await _matchService.AddTeam(match.SecondTeam);
+            await _matchService.AddMatch(match);
+        }
+
+        private async Task AddWithDependencies(MatchResultInfo<TestTeamInfo> result)
+        {
+            await AddWithDependencies(result.Match);
+            await _matchService.AddMatchResult(result);
+        }
 
         #endregion Private methods
     }

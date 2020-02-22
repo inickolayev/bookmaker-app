@@ -41,14 +41,21 @@ namespace BookmakerApp.Core
         ///     Получить список всех футбольных матчей
         /// </summary>
         /// <returns>Список матчей</returns>
-        Task<IEnumerable<MatchInfo<TTeam>>> GetMatchesAsync();
+        Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync();
 
         /// <summary>
         ///     Получить список футбольных матчей с учетом фильтрации
         /// </summary>
         /// <param name="status">Статус матчей</param>
         /// <returns>Список матчей</returns>
-        Task<IEnumerable<MatchInfo<TTeam>>> GetMatchesAsync(EMatchStatus status);
+        Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync(EMatchStatus status);
+
+        /// <summary>
+        ///     Получить список футбольных матчей с учетом фильтрации
+        /// </summary>
+        /// <param name="team">Команда, участвующая в матче</param>
+        /// <returns>Список матчей</returns>
+        Task<OperationResultInfo<IEnumerable<MatchInfo<TTeam>>>> GetMatchesAsync(TTeam team);
 
         #endregion Matches
 
